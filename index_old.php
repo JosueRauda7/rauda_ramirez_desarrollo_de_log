@@ -5,12 +5,7 @@
 	include("core/inc/funciones.inc.php");
 	include("core/secure/ips.php");
 	$archivo = "./logs/log.log";
-  $ipCliente = $_SERVER['REMOTE_ADDR'];
-  // Permitir ::1 como localhost
-  if ($ipCliente === '::1') {
-    $ipCliente = '127.0.0.1';
-  }
-	$ip = ip_in_ranges($ipCliente, $rango);
+	$ip = ip_in_ranges($_SERVER['REMOTE_ADDR'], $rango);
 ?>
 <!DOCTYPE html>
 <html lang="es-SV">
@@ -70,7 +65,7 @@
 	</div>
 <?php
 	if($ip === true){
-		crear_editar_log($archivo,"El archivo ".__FILE__." ha sido cargado",0,$ipCliente,((array_key_exists("HTTP_REFERER",$_SERVER)) ? $_SERVER["HTTP_REFERER"] : "NULL REFERER"),$_SERVER["HTTP_USER_AGENT"]);
+		crear_editar_log($archivo,"El archivo ".__FILE__." ha sido cargado",0,$_SERVER['REMOTE_ADDR'],((array_key_exists("HTTP_REFERER",$_SERVER)) ? $_SERVER["HTTP_REFERER"] : "NULL REFERER"),$_SERVER["HTTP_USER_AGENT"]);
 ?>
 		<div class="form-row">
 			<div class="form-group col-md-5	text-center">
@@ -97,8 +92,8 @@
 	}else{
 		$redirect = "https://www.ufg.edu.sv/";
 		echo("Su dirección IP no tiene permitida la visita a esta página, será redirigido en breves segundos a un sitio seguro");
-		crear_editar_log($archivo,"Dirección IP no autorizada ha cargado el archivo ".__FILE__." ha sido redirigido a: $redirect",1,$ipCliente,$_SERVER["HTTP_REFERER"],$_SERVER["HTTP_USER_AGENT"]);
-		header( "refresh:5; url=$redirect" );
+		crear_editar_log($archivo,"Dirección IP no autorizada ha cargado el archivo ".__FILE__." ha sido redirigido a: $redirect",1,$_SERVER['REMOTE_ADDR'],$_SERVER["HTTP_REFERER"],$_SERVER["HTTP_USER_AGENT"]);
+		header( "refresh:5; url=$redirect" ); 
 	}
 ?>
 	</body>
